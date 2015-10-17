@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,11 +18,13 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
 
     private TextView ip_address;
     private TextView port_number;
-    private Button up;
-    private Button down;
+    //private Button up;
+    //private Button down;
     private Button connect;
     private Button disconnect;
+    private SeekBar seekBar;
     private Socket socket;
+    private Toast toast;
 
     public BehaviourFragment(){}
 
@@ -37,14 +40,16 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
 
         if(view != null){
 
-            up = ((Button) view.findViewById(R.id.up_button));
-            down = ((Button) view.findViewById(R.id.down_button));
+            //up = ((Button) view.findViewById(R.id.up_button));
+            //down = ((Button) view.findViewById(R.id.down_button));
+            seekBar = ((SeekBar) view.findViewById(R.id.seek_bar));
             ip_address = ((TextView) view.findViewById(R.id.ip_address_tv));
             ip_address.setText(GlobalData.getInstance().getIpAddress());
             port_number = ((TextView) view.findViewById(R.id.port_number_tv));
             port_number.setText(GlobalData.getInstance().getPortNumberAsString());
             connect = ((Button) view.findViewById(R.id.connect_button));
             disconnect = ((Button) view.findViewById(R.id.disconnect_button));
+            toast = new Toast(getActivity().getApplicationContext());
         }
 
         return view;
@@ -52,8 +57,23 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        up.setOnClickListener(this);
-        down.setOnClickListener(this);
+        //up.setOnClickListener(this);
+        //down.setOnClickListener(this);
+        seekBar.setMax(200);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                sendDataToSocket(" | " + String.valueOf(progress - 100) + " | ");
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         connect.setOnClickListener(this);
         disconnect.setOnClickListener(this);
     }
@@ -67,19 +87,21 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
 
         if (existsIpAddress()){
             switch (view.getId()){
-                case R.id.up_button:
+                /*case R.id.up_button:
                     sendDataToSocket("up");
                     break;
                 case R.id.down_button:
                     sendDataToSocket("down");
-                    break;
+                    break;*/
                 case R.id.connect_button:
                     connectToSocket();
                     break;
                 case R.id.disconnect_button:
                     disconnectFromSocket();
                     break;
+
             }
+
         }
     }
 
@@ -139,11 +161,18 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
     }
 
     private void showToastMessage(String message){
-        Toast.makeText(this.getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        showToast(message,Toast.LENGTH_SHORT);
     }
 
     private void showLongToastMessage(String message){
-        Toast.makeText(this.getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        showToast(message, Toast.LENGTH_LONG);
+    }
+
+    private void showToast(String message, int duration){
+        if (toast != null)
+            toast.cancel();
+        toast = Toast.makeText(this.getActivity().getApplicationContext(), message, duration);
+        toast.show();
     }
 
 }
