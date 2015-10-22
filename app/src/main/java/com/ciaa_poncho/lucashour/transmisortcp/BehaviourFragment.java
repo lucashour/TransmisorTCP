@@ -14,7 +14,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.net.Socket;
 
-public class BehaviourFragment extends Fragment implements View.OnClickListener{
+public class BehaviourFragment extends Fragment implements View.OnClickListener {
 
     private TextView ip_address;
     private TextView port_number;
@@ -37,6 +37,7 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view =  inflater.inflate(R.layout.fragment_behaviour, container, false);
+
 
         if(view != null){
 
@@ -65,7 +66,7 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 String string = String.valueOf(progress);
-                sendDataToSocket(string.length() + string);
+                sendDataToSocket(String.valueOf(string.length() + 1) + "%" + string);
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -176,5 +177,4 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
         toast = Toast.makeText(this.getActivity().getApplicationContext(), message, duration);
         toast.show();
     }
-
 }
