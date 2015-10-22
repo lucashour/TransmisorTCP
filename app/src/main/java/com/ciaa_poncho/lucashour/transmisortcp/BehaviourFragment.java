@@ -11,9 +11,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.Socket;
-
 public class BehaviourFragment extends Fragment implements View.OnClickListener {
 
     private TextView ip_address;
@@ -23,7 +20,6 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener 
     private Button connect;
     private Button disconnect;
     private SeekBar seekBar;
-    private Socket socket;
     private Toast toast;
 
     public BehaviourFragment(){}
@@ -65,8 +61,8 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                String string = String.valueOf(progress);
-                sendDataToSocket(String.valueOf(string.length() + 1) + "%" + string);
+                String result = TcpSocketManager.sendDataToSocket(formatMessageToSend(progress));
+                displayInformationMessage(result);
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -97,10 +93,11 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener 
                     sendDataToSocket("down");
                     break;*/
                 case R.id.connect_button:
-                    connectToSocket();
+                    displayInformationMessage(TcpSocketManager.connectToSocket());
                     break;
                 case R.id.disconnect_button:
-                    disconnectFromSocket();
+                    this.seekBar.setProgress(100);
+                   displayInformationMessage(TcpSocketManager.disconnectFromSocket());
                     break;
 
             }
@@ -116,51 +113,14 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener 
         return true;
     }
 
-    private boolean isSocketConnected(){
-        if (this.socket != null){
-            if (this.socket.isConnected())
-                return true;
-        }
-        return false;
+    private static String formatMessageToSend(int value){
+        String string = String.valueOf(value);
+        return (String.valueOf(string.length() + 1) + "%" + string);
     }
 
-    private void connectToSocket(){
-        String ipAddress = GlobalData.getInstance().getIpAddress();
-        int portNumber = GlobalData.getInstance().getPortNumber();
-        if (!isSocketConnected()){
-            try {
-                socket = new Socket(ipAddress,portNumber);
-                showLongToastMessage("Conexión establecida con " + ipAddress + ":" + String.valueOf(portNumber) + ".");
-            } catch (IOException e) {
-                e.printStackTrace();
-                showToastMessage("Error al intentar establecer conexión.");
-            }
-        }
-        else
-            showToastMessage("Ya existe una conexión. Es necesario cerrar la conexión existente.");
-    }
-
-    private void disconnectFromSocket(){
-        if (isSocketConnected()){
-            try {
-                socket.close();
-                showToastMessage("Conexión cerrada exitosamente.");
-            } catch (IOException e) {
-                e.printStackTrace();
-                showToastMessage("Error al intentar finalizar conexión.");
-            }
-        }
-        else
-            showToastMessage("No existe conexión.");
-    }
-
-    private void sendDataToSocket(String message){
-        if (isSocketConnected()){
-            TcpAsyncSend tcpCommunication = new TcpAsyncSend(socket,message);
-            tcpCommunication.executeOnExecutor(TcpAsyncSend.THREAD_POOL_EXECUTOR);
-        }
-        else
-            showToastMessage("Datos no enviados por no existir conexión.");
+    private void displayInformationMessage(String message){
+        if (!message.equals(""))
+            showToastMessage(message);
     }
 
     private void showToastMessage(String message){
@@ -177,4 +137,5 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener 
         toast = Toast.makeText(this.getActivity().getApplicationContext(), message, duration);
         toast.show();
     }
+
 }

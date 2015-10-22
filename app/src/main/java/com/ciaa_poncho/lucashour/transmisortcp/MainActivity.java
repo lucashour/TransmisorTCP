@@ -1,6 +1,7 @@
 package com.ciaa_poncho.lucashour.transmisortcp;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -29,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
 
     String TITLES[] = {"Comunicación","Configuración"};
     int ICONS[] = {R.drawable.ic_action,R.drawable.ic_action};
-
+    private Fragment currentFragment;
     private Toolbar toolbar;                            // Declaración del Toolbar
     RecyclerView recyclerView;                          // Declaración del recyclerView
     RecyclerView.Adapter adapter;                       // Declaración del adapter para recyclerView
@@ -62,8 +63,8 @@ public class MainActivity extends ActionBarActivity {
         });
        /*Configuración del Fragment visible por defecto*/
         FragmentManager fragmentManager = getFragmentManager();
-        BehaviourFragment fragmentA = new BehaviourFragment();
-        fragmentManager.beginTransaction().replace(R.id.content, fragmentA).commit();
+        this.currentFragment = new BehaviourFragment();
+        fragmentManager.beginTransaction().replace(R.id.content, this.currentFragment).commit();
 
        /*Configuración de escucha de clicks en las secciones del drawer.*/
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
@@ -75,10 +76,16 @@ public class MainActivity extends ActionBarActivity {
                     int id = recyclerView.getChildAdapterPosition(child);
                     switch (id) {
                         case 1:
-                            BehaviourFragment fragmentA = new BehaviourFragment();
-                            localFragmentManager.beginTransaction().replace(R.id.content, fragmentA).commit();
+                            if (currentFragment.getClass() != BehaviourFragment.class){
+                                currentFragment = new BehaviourFragment();
+                                localFragmentManager.beginTransaction().replace(R.id.content, currentFragment).commit();
+                            }
                             break;
                         case 2:
+                            if (currentFragment.getClass() != ConfigurationFragment.class){
+                                currentFragment = new ConfigurationFragment();
+                                localFragmentManager.beginTransaction().replace(R.id.content, currentFragment).commit();
+                            }
                             ConfigurationFragment fragmentB = new ConfigurationFragment();
                             localFragmentManager.beginTransaction().replace(R.id.content, fragmentB).commit();
                             break;
