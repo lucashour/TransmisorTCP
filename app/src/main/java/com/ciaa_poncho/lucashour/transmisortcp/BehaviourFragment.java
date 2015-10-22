@@ -64,7 +64,8 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sendDataToSocket(" | " + String.valueOf(progress - 100) + " | ");
+                String string = String.valueOf(progress);
+                sendDataToSocket(string.length() + string);
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
