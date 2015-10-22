@@ -60,6 +60,7 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
         //up.setOnClickListener(this);
         //down.setOnClickListener(this);
         seekBar.setMax(200);
+        seekBar.setProgress(100);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -67,11 +68,11 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                // Sin implementar.
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                // Sin implementar.
             }
         });
         connect.setOnClickListener(this);
@@ -80,7 +81,7 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener{
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(false); //Indicamos que este Fragment no tiene su propio menu de opciones
+        setHasOptionsMenu(false); //Indicamos que este Fragment no tiene su propio menú de opciones
     }
 
     public void onClick(View view) {
