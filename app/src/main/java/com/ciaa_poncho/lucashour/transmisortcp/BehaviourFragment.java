@@ -41,9 +41,9 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener 
             //down = ((Button) view.findViewById(R.id.down_button));
             seekBar = ((SeekBar) view.findViewById(R.id.seek_bar));
             ip_address = ((TextView) view.findViewById(R.id.ip_address_tv));
-            ip_address.setText(GlobalData.getInstance().getIpAddress());
+            ip_address.setText(TcpSocketData.getInstance().getIpAddress());
             port_number = ((TextView) view.findViewById(R.id.port_number_tv));
-            port_number.setText(GlobalData.getInstance().getPortNumberAsString());
+            port_number.setText(TcpSocketData.getInstance().getPortNumberAsString());
             connect = ((Button) view.findViewById(R.id.connect_button));
             disconnect = ((Button) view.findViewById(R.id.disconnect_button));
             toast = new Toast(getActivity().getApplicationContext());
@@ -106,7 +106,7 @@ public class BehaviourFragment extends Fragment implements View.OnClickListener 
     }
 
     private boolean existsIpAddress(){
-        if (GlobalData.getInstance().getIpAddress() == null) {
+        if (TcpSocketData.getInstance().getIpAddress() == null) {
             showToastMessage("Configuración de dirección IP destino requerida.");
             return false;
         }

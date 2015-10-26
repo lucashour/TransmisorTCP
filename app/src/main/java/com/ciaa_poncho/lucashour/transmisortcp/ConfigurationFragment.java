@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class ConfigurationFragment extends Fragment implements View.OnClickListener{
@@ -30,9 +29,9 @@ public class ConfigurationFragment extends Fragment implements View.OnClickListe
 
             button = ((Button) v.findViewById(R.id.button));
             ip_address = ((EditText) v.findViewById(R.id.ip_address));
-            ip_address.setText(GlobalData.getInstance().getIpAddress());
+            ip_address.setText(TcpSocketData.getInstance().getIpAddress());
             port_number = ((EditText) v.findViewById(R.id.port_number));
-            port_number.setText(String.valueOf(GlobalData.getInstance().getPortNumber()));
+            port_number.setText(String.valueOf(TcpSocketData.getInstance().getPortNumber()));
         }
 
         return v;
@@ -54,9 +53,9 @@ public class ConfigurationFragment extends Fragment implements View.OnClickListe
             if (ip_address.getText().toString().isEmpty())
                 ip_address.setText("192.168.4.1");
 
-            GlobalData.getInstance().setIpAddress(ip_address.getText().toString());
+            TcpSocketData.getInstance().setIpAddress(ip_address.getText().toString());
 
-            GlobalData.getInstance().setPortNumber(Integer.parseInt(port_number.getText().toString()));
+            TcpSocketData.getInstance().setPortNumber(Integer.parseInt(port_number.getText().toString()));
 
             Toast.makeText(view.getContext(), "Datos configurados correctamente", Toast.LENGTH_SHORT).show();
         }

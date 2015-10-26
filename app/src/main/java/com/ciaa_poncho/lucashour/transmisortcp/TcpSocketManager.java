@@ -6,12 +6,12 @@ import java.net.Socket;
 public class TcpSocketManager {
 
     public static String connectToSocket(){
-        String ipAddress = GlobalData.getInstance().getIpAddress();
+        String ipAddress = TcpSocketData.getInstance().getIpAddress();
         String result;
-        int portNumber = GlobalData.getInstance().getPortNumber();
+        int portNumber = TcpSocketData.getInstance().getPortNumber();
         if (!isSocketConnected()){
             try {
-                GlobalData.getInstance().setSocket(new Socket(ipAddress, portNumber));
+                TcpSocketData.getInstance().setSocket(new Socket(ipAddress, portNumber));
                 result = "Conexión establecida con " + ipAddress + ":" + String.valueOf(portNumber) + ".";
             } catch (IOException e) {
                 e.printStackTrace();
@@ -27,7 +27,7 @@ public class TcpSocketManager {
         String result;
         if (isSocketConnected()){
             try {
-                Socket socket = GlobalData.getInstance().getSocket();
+                Socket socket = TcpSocketData.getInstance().getSocket();
                 socket.close();
                 result = "Conexión cerrada exitosamente.";
             } catch (IOException e) {
@@ -42,7 +42,7 @@ public class TcpSocketManager {
 
     public static String sendDataToSocket(String message){
         if (isSocketConnected()){
-            Socket socket = GlobalData.getInstance().getSocket();
+            Socket socket = TcpSocketData.getInstance().getSocket();
             TcpAsyncSend tcpCommunication = new TcpAsyncSend(socket,message);
             tcpCommunication.executeOnExecutor(TcpAsyncSend.THREAD_POOL_EXECUTOR);
             return "";
@@ -52,7 +52,7 @@ public class TcpSocketManager {
     }
 
     private static boolean isSocketConnected(){
-        Socket socket = GlobalData.getInstance().getSocket();
+        Socket socket = TcpSocketData.getInstance().getSocket();
         if (socket != null){
             if (socket.isConnected())
                 return true;

@@ -2,21 +2,21 @@ package com.ciaa_poncho.lucashour.transmisortcp;
 
 import java.net.Socket;
 
-public class GlobalData {
+public class TcpSocketData {
 
-	private static GlobalData singleton_instance = null;
+	private static TcpSocketData singleton_instance = null;
 	private String ip_address;
 	private int port_number;
 	private Socket socket;
 
-	protected GlobalData(){
+	protected TcpSocketData(){
 		/* Aplicación de patrón Singleton para mantener una única instancia de la clase
 		 * accesible desde cualquier sector de la applicación */
 	}
 
-	public static GlobalData getInstance() {
+	public static TcpSocketData getInstance() {
 		if(singleton_instance == null) {
-			singleton_instance = new GlobalData();
+			singleton_instance = new TcpSocketData();
 		}
 		return singleton_instance;
 	}
